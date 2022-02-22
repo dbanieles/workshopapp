@@ -3,7 +3,7 @@ pipeline {
         kubernetes {
           label 'kubetemplate'
           idleMinutes 5
-          yamlFile 'agent.yaml'
+          yamlFile 'pod-template.yaml'
           defaultContainer 'maven'
         }
     }

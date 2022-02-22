@@ -1,46 +1,48 @@
 pipeline {
     agent {
         kubernetes {
-          label 'kubeagent'
+          label 'kubetemplate'
           idleMinutes 5
-          yamlFile 'agent.yaml' 
+          yamlFile 'agent.yaml'
           defaultContainer 'maven'
         }
     }
     environment {
-        GIT_URL = "https://danielebaggio90@bitbucket.org/danielebaggio90/message-sender.git"
-        GIT_CREDENTAL_ID = "bitbucket"
         DOCKER_REGISTRY = "https://hub.docker.com/"
-        DOCKER_REPOSITORY = "devs90/devrepo"
+        DOCKER_REPOSITORY = "devs90/workshop"
         DOCKER_CREDENTIAL_ID = "dockerhub"
-        DOCKER_IMAGE = ""
+        DOCKERHUB_CREDENTIAL = credential("dockerhub")
     }
     stages {
-        stage("Git") {
-            steps {
-                echo "Clone repository"
-                echo params.branch
-                dir("project") {
-                    git url: GIT_URL,
-                    credentialsId: GIT_CREDENTAL_ID,
-                    branch: "develop" //params.branch
-                }
-            }
-        }
         stage('Build') {
             steps {
-                sh "mvn clean install"   
-            }
-        }
-        stage('Unit Test') {
-            steps {
-                sh "mvn clean install"   
+                sh "mvn clean package"
             }
         }
         stage('Docker') {
             steps {
-                container('docker') {  
-                  sh "docker build -t devs90/devrepo:latest ."
+                container('docker') {
+                  sh "docker build -t devs90/workshop ."
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                container('docker') {
+                  sh '''
+                    echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USER --password-stdin
+
+                    docker push devs90/workshop:1.1.0
+                    docker push devs90/workshop:latest
+                '''
+
+                }
+            }
+        }
+        stage('Helm') {
+            steps {
+                container('helm') {
+                   sh "helm version"
                 }
             }
         }

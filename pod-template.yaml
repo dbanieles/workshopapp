@@ -15,7 +15,7 @@ spec:
           mountPath: /root/.m2
     - name: docker
       image: docker:19.03
-      command: ["dockerd"]
+      command: ["sudo dockerd"]
       tty: true
       privileged: true
       volumeMounts:

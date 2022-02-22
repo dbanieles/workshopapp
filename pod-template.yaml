@@ -14,7 +14,7 @@ spec:
         - name: m2
           mountPath: /root/.m2
     - name: docker
-      image: docker:19.03
+      image: devs90/jenkins-agent:latest
       command:
         - cat
       tty: true

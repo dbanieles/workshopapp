@@ -11,7 +11,7 @@ pipeline {
         DOCKER_REGISTRY = "https://hub.docker.com/"
         DOCKER_REPOSITORY = "devs90/workshop"
         DOCKER_CREDENTIAL_ID = "dockerhub"
-        DOCKERHUB_CREDENTIAL = credential("dockerhub")
+        DOCKERHUB_CREDENTIAL = credentials("dockerhub")
     }
     stages {
         stage('Build') {

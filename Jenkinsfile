@@ -11,12 +11,12 @@ pipeline {
         DOCKER_REGISTRY = "https://hub.docker.com/"
         DOCKER_REPOSITORY = "devs90/workshop"
         DOCKER_CREDENTIAL_ID = "dockerhub"
-        DOCKERHUB_CREDENTIAL = credentials("dockerhub")
+        DOCKERHUB_CREDENTIALS = credentials("dockerhub")
     }
     stages {
         stage('Build') {
             steps {
-                sh "mvn clean package"
+                sh "mvn -B -DskipTests clean package"
             }
         }
         stage('Docker') {
@@ -26,13 +26,13 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Publish') {
             steps {
                 container('docker') {
                   sh '''
-                    echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USER --password-stdin
-
-                    docker push devs90/workshop:1.1.0
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    docker tag devs90/workshop devs90/workshop:$BUILD_NUMBER
+                    docker push devs90/workshop:$BUILD_NUMBER
                     docker push devs90/workshop:latest
                 '''
 

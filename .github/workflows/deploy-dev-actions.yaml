@@ -70,4 +70,4 @@ jobs:
 
     - name: Docker push
       run: |
-        docker push devs90/workshop:7
+        docker push devs90/workshop:8

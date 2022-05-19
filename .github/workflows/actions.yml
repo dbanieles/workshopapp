@@ -23,7 +23,17 @@ jobs:
         cache: maven
         settings-path: ${{ github.workspace }}
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -DskipTests -B package --file pom.xml
+    - name: Test with Maven
+      run: mvn -Dmaven.test.failure.ignore=true test
+    - name: Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Maven Tests
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+        fail-on-error: true
     - name: Save build
       uses: actions/upload-artifact@v3
       with:

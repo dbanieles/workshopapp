@@ -1,8 +1,8 @@
-name: Deploy DEV
+name: Deploy STAGING
 
 on:
   push:
-    branches: [ feature/* ]
+    branches: [ release/* ]
 
 jobs:
   test:

@@ -19,7 +19,7 @@ pipeline {
                 echo params.branch
                 dir("project") {
                     git url: GIT_URL
-                    branch: params.branch
+                    branch: "master"
                 }
                             
             }

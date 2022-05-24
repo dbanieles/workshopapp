@@ -5,7 +5,7 @@ pipeline {
         jdk "JDK"
     }
     environment {
-        GIT_URL = "https://danielebaggio90@bitbucket.org/danielebaggio90/message-sender.git"
+        GIT_URL = "https://github.com/dbanieles/workshopapp.git"
         GIT_CREDENTAL_ID = "bitbucket"
         DOCKER_REGISTRY = "https://hub.docker.com/"
         DOCKER_REPOSITORY = "devs90/devrepo"
@@ -18,8 +18,7 @@ pipeline {
                 echo "Clone repository"
                 echo params.branch
                 dir("project") {
-                    git url: GIT_URL,
-                    credentialsId: GIT_CREDENTAL_ID,
+                    git url: GIT_URL
                     branch: params.branch
                 }
                             

@@ -66,7 +66,7 @@ pipeline {
                 echo "Docker"
                 dir("project"){
                     script {
-                        DOCKER_IMAGE = docker.build(DOCKER_REPOSITORY)
+                        sh '''docker build -t devs90/workshop .'''
                     }
                 }
             }
@@ -77,10 +77,12 @@ pipeline {
                 echo "Publish"
                 dir("project"){
                     script {
-                        docker.withRegistry(DOCKER_REPOSITORY, DOCKER_CREDENTIAL_ID) {
-                            DOCKER_IMAGE.push("${env.BUILD_NUMBER}")
-                            DOCKER_IMAGE.push("latest")
-                        }
+                         sh '''
+                            echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                            docker tag devs90/workshop devs90/workshop:$TAG
+                            docker push devs90/workshop:$TAG
+                            docker push devs90/workshop:latest
+                          '''
                     }
                 }
             }

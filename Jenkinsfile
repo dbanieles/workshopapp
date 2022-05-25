@@ -85,17 +85,5 @@ pipeline {
                 }
             }
         }
-
-        stage("Finish") {
-            steps{
-                echo "Clean up workdir"
-                dir("project"){
-                    sh '''
-                        docker rmi $DOCKER_REGISTRY:latest
-                    '''
-                    deleteDir()
-                }
-            }
-        }   
     }      
 }

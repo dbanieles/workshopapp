@@ -11,7 +11,7 @@ pipeline {
         DOCKER_REPOSITORY = "devs90/devrepo"
         DOCKER_CREDENTIAL_ID = "dockerhub"
         DOCKERHUB_CREDENTIALS = credentials("dockerhub")
-        DOCKER_IMAGE = ""
+        TAG = env.BUILD_NUMBER
     }
     stages {
         stage("Git") {

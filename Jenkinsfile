@@ -11,7 +11,6 @@ pipeline {
         DOCKER_REPOSITORY = "devs90/devrepo"
         DOCKER_CREDENTIAL_ID = "dockerhub"
         DOCKERHUB_CREDENTIALS = credentials("dockerhub")
-        TAG = ${currentBuild.number}
     }
     stages {
         stage("Git") {
@@ -80,8 +79,6 @@ pipeline {
                     script {
                          sh '''
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                            docker tag devs90/workshop devs90/workshop:$TAG
-                            docker push devs90/workshop:$TAG
                             docker push devs90/workshop:latest
                           '''
                     }

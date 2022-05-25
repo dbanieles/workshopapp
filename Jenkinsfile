@@ -10,6 +10,7 @@ pipeline {
         DOCKER_REGISTRY = "https://hub.docker.com/"
         DOCKER_REPOSITORY = "devs90/devrepo"
         DOCKER_CREDENTIAL_ID = "dockerhub"
+        DOCKERHUB_CREDENTIALS = credentials("dockerhub")
         DOCKER_IMAGE = ""
     }
     stages {

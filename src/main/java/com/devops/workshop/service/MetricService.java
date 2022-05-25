@@ -25,7 +25,7 @@ public class MetricService {
     public List<Workshop> getDataWithWhile(Integer max){
         List<Workshop> workshopList = new ArrayList<>();
         Integer index = 0;
-
+        Integer test = 1;
         while (index < max){
             workshopList.add(new Workshop(index, "Workshop-"+index, "https://workshop."+index+".com"));
         }

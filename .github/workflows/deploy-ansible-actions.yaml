@@ -22,3 +22,6 @@ jobs:
       - uses: ./.github/actions/ansible
         env:
           VAULT_PASS: ${{ secrets.VAULT_PASS }}
+        with: 
+          playbook: ./playbooks/build.yml
+          inventory: localhost

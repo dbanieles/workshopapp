@@ -13,6 +13,6 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: build.yml
-          directory: ./playbooks/
+          directory: ../../playbooks/
           options: |
             --verbose

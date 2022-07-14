@@ -1,5 +1,5 @@
 - hosts: localhost
   tasks:
-    - name: Test docker
-      shell: mvn clean
+    - name: Test Maven
+      shell: ./mvnw clean package
       

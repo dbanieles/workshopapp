@@ -11,6 +11,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Ansible 
-        uses: tomasnorre/ansible-cli-action@0.0.5
+        uses: tomasnorre/ansible-cli-action@0.0.2
         with:
           command: ansible-playbook palaybooks/build.yml

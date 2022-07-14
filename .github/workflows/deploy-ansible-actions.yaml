@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Ansible build Docker image
+      - name: Ansible 
         uses: tomasnorre/ansible-cli-action@0.0.5
-        command: ansible-playbook palaybooks/build.yml
+        with:
+          command: ansible-playbook palaybooks/build.yml

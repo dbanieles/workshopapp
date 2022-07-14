@@ -14,5 +14,5 @@
       tags:
         - packages
     - name: Test docker
-      shell: docker --version
+      command: docker --version
       

@@ -20,6 +20,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+          settings-path: ${{ github.workspace }}
       - name: Ansible build Docker image
         uses: Hugozys/ansible-deploy@master
         with:

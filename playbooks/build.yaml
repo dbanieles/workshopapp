@@ -1,18 +1,5 @@
 - hosts: localhost
   tasks:
-    - name: Ansible init
-      debug:
-        msg: Hello Ansible World
-    - name: Install tool
-      raw: name={{ item }} state=installed
-      with_items:
-        - python3
-        - python3-pip
-        - docker-ce
-        - docker-ce-cli
-        - containerd-io
-      tags:
-        - packages
     - name: Test docker
-      shell: docker ps -a
+      shell: mvn clean
       

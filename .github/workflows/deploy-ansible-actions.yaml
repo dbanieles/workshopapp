@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Ansible build Docker image
-        uses: Hugozys/ansible-deploy@master
+        uses: ./.github/actions/ansible
         with:
           directory: './playbooks/'
           playbook: 'build.yaml'

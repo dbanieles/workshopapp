@@ -3,5 +3,8 @@
     - name: Ansible init
       debug:
         msg: Hello Ansible World
+    - name: upload the site directory to the docker host
+      synchronize: src=workshopapp dest=/tmp
+      register: sync_result
     - name: Build Docker image
-      command: docker build -t demo:latest .
+      command: docker build -t demo:latest /tmp/workshopapp

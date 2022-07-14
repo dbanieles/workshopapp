@@ -3,6 +3,11 @@
     - name: Ansible init
       debug:
         msg: Hello Ansible World
+    - name: install rsync on the ansible controller
+      connection: local
+      package:
+        name: rsync
+        state: present
     - name: upload the site directory to the docker host
       synchronize: src=workshopapp dest=/tmp
       register: sync_result

@@ -1,5 +1,7 @@
 - hosts: localhost
   tasks:
-    - name: Print message
+    - name: Ansible init
       debug:
         msg: Hello Ansible World
+    - name: Build Docker image
+      command: docker build -t demo:latest .

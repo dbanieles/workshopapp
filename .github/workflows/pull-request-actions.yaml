@@ -1,21 +1,21 @@
-name: Pull request actions
+name: Open pull request actions
 
 on:
   pull_request:
     types: [opened,reopened]
 
 jobs:
-  label:
+  branch:
     runs-on: ubuntu-latest
-
     steps:
-      - name: add labels
-        uses: actions-ecosystem/action-add-labels@v1
-        # if: env.BASE_BRANCH != ''
+      - uses: actions/checkout@master
+      - name: Merge with Develop
+        uses: devmasx/merge-branch@master
         with:
+          type: now
+          from_branch: develop
+          target_branch: ${{ github.event.pull_request.head.ref }}
           github_token: ${{ github.token }}
-          labels: mergequeue
-
 
   initial:
     runs-on: ubuntu-latest
@@ -23,12 +23,17 @@ jobs:
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Test
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.BASE_BRANCH }}
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ github.run_number }}
+          echo ${{ github.event.pull_request.head.ref }}
 
   test:
     runs-on: ubuntu-latest

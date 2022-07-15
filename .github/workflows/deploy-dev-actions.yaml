@@ -2,7 +2,7 @@ name: Deploy DEV
 
 on:
   push:
-    branches: [ feature/* ]
+    tags: feature/[1-9]+.[0-9]+.[0-9]+
 
 jobs:
   check-staging:
@@ -17,6 +17,12 @@ jobs:
         run: echo ${{ github.event.repository.default_branch }}
       - name: Log ref name
         run: echo ${{ github.ref_name }}
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Test
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
       - name: Check git branch
         uses: SonicGarden/check-merged-action@v1
         with:

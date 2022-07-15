@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-
       - name: Merge with Develop
         uses: devmasx/merge-branch@master
         with:
           type: now
-          target_branch: develop
+          from_branch: develop
+          target_branch: ${GITHUB_REF##*/}
           github_token: ${{ github.token }}
 
   initial:
@@ -23,12 +23,17 @@ jobs:
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Test
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.BASE_BRANCH }}
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ github.run_number }}
+          echo ${{ steps.extract_branch.outputs.branch }}
 
   test:
     runs-on: ubuntu-latest

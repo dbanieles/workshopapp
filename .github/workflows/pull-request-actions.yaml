@@ -2,9 +2,20 @@ name: Pull request actions
 
 on:
   pull_request:
-    branches: [ develop,master ]
+    types: [opened,reopened]
 
 jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: add labels
+        uses: actions-ecosystem/action-add-labels@v1
+        # if: env.BASE_BRANCH != ''
+        with:
+          github_token: ${{ github.token }}
+          labels: mergequeue
+
 
   initial:
     runs-on: ubuntu-latest
@@ -15,6 +26,7 @@ jobs:
       - name: Test
         run: |
           echo $RELEASE_VERSION
+          echo ${{ env.BASE_BRANCH }}
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ github.run_number }}
 

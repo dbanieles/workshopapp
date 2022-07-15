@@ -2,8 +2,7 @@ name: Pull request actions
 
 on:
   pull_request:
-    branches: [ develop,master ]
-    types: [opened]
+    types: [opened,reopened]
 
 jobs:
   label:

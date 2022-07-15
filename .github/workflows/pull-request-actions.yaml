@@ -10,27 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/github-script@v3
+      - name: add labels
+        uses: actions-ecosystem/action-add-labels@v1
+        # if: env.BASE_BRANCH != ''
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            var msg = `👋 Thanks for participating! I will review as soon as possible, usually within a few hours.`
-            var body = context.payload.pull_request.body
-
-            # Create comment
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: msg
-            })
-
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['mergequeue']
-            })
+          github_token: ${{ github.token }}
+          labels: mergequeue
 
 
   initial:
@@ -42,6 +27,7 @@ jobs:
       - name: Test
         run: |
           echo $RELEASE_VERSION
+          echo ${{ env.BASE_BRANCH }}
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ github.run_number }}
 

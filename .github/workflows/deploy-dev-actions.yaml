@@ -8,9 +8,15 @@ jobs:
   check-staging:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout git branch
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Log default branch
+        run: echo ${{ github.event.repository.default_branch }}
+      - name: Log ref name
+        run: echo ${{ github.ref_name }}
+      - name: Check git branch
       - uses: SonicGarden/check-merged-action@v1
         with:
           token: ${{ secrets.ACCESS_TOKEN_GITHUB }}

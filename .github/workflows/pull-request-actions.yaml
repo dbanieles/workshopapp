@@ -8,14 +8,13 @@ on:
 jobs:
   label:
     runs-on: ubuntu-latest
-    
-    steps:
+
+      steps:
       - uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-
-            var msg = `👋 👋 👋 Label for automate pull request merge 👋 👋 👋 
+            var msg = `👋 Thanks for participating! I will review as soon as possible, usually within a few hours.
             var body = context.payload.pull_request.body
 
             # Create comment
@@ -26,12 +25,11 @@ jobs:
               body: msg
             })
 
-            # Add label
             github.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['new submission']
+              labels: ['mergequeue']
             })
 
 

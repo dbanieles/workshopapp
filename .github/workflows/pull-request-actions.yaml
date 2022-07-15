@@ -3,8 +3,37 @@ name: Pull request actions
 on:
   pull_request:
     branches: [ develop,master ]
+    types: [opened]
 
 jobs:
+  label:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+
+            var msg = `👋 👋 👋 Label for automate pull request merge 👋 👋 👋 
+            var body = context.payload.pull_request.body
+
+            # Create comment
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: msg
+            })
+
+            # Add label
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['new submission']
+            })
+
 
   initial:
     runs-on: ubuntu-latest

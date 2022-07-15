@@ -77,7 +77,6 @@ pipeline {
                 echo "Publish"
                 dir("project"){
                     script {
-                         sh '''
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker push devs90/workshop:latest
                           '''

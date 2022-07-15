@@ -5,17 +5,17 @@ on:
     types: [opened,reopened]
 
 jobs:
-  label:
+  branch:
     runs-on: ubuntu-latest
-
     steps:
-      - name: add labels
-        uses: actions-ecosystem/action-add-labels@v1
-        # if: env.BASE_BRANCH != ''
-        with:
-          github_token: ${{ github.token }}
-          labels: mergequeue
+      - uses: actions/checkout@master
 
+      - name: Merge with Develop
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: develop
+          github_token: ${{ github.token }}
 
   initial:
     runs-on: ubuntu-latest

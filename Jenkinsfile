@@ -76,13 +76,11 @@ pipeline {
             steps {
                 echo "Publish"
                 dir("project"){
-                    
                     script {
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker push devs90/workshop:latest
                           '''
                     }
-
                 }
             }
         }

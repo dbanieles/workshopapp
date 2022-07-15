@@ -1,81 +1,89 @@
 pipeline {
-    agent {
-        kubernetes {
-          label 'kubetemplate'
-          idleMinutes 5
-          yamlFile 'pod-template.yaml'
-          defaultContainer 'maven'
-        }
+    agent any
+    tools {
+        maven "MAVEN"
+        jdk "JDK"
     }
     environment {
+        GIT_URL = "https://github.com/dbanieles/workshopapp.git"
+        GIT_CREDENTAL_ID = "bitbucket"
         DOCKER_REGISTRY = "https://hub.docker.com/"
-        DOCKER_REPOSITORY = "devs90/workshop"
+        DOCKER_REPOSITORY = "devs90/devrepo"
         DOCKER_CREDENTIAL_ID = "dockerhub"
         DOCKERHUB_CREDENTIALS = credentials("dockerhub")
-        CURRENT_BRANCH = env.BRANCH_NAME
-        TAG = env.BUILD_NUMBER
     }
     stages {
-        stage('Code Analisys') {
+        stage("Git") {
             steps {
-                echo "Sonarqube Analisys"
+                echo "Clone repository"
+                echo params.branch
+                dir("project") {
+                    git url: GIT_URL
+                }
+                            
             }
         }
-        stage('Unit Test') {
+
+        stage("Sonar analisys") {
+            steps {
+                echo "Validate"
+            }
+        }
+
+        stage("Unit Test") {
             steps {
                 echo "Unit Test"
+                dir("project"){
+                    sh '''
+                        mvn test surefire-report:report
+                    '''
+                }
             }
         }
-        stage('Unit Test') {
+
+        stage("Integration Test") {
             steps {
                 echo "Integration Test"
-            }
-        }
-        stage('Build') {
-            steps {
-                sh "mvn -B -DskipTests clean package"
-            }
-        }
-        stage('Docker') {
-            steps {
-                container('docker') {
-                  sh "docker build -t devs90/workshop ."
+                dir("project"){
+                    // sh "mvn test"
                 }
             }
         }
-        stage('Publish') {
+        
+        stage("Build") {
             steps {
-                container('docker') {
-                  sh '''
-                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                    docker tag devs90/workshop devs90/workshop:$TAG
-                    docker push devs90/workshop:$TAG
-                    docker push devs90/workshop:latest
-                  '''
+                echo "Build"
+                dir("project"){
+                    sh '''
+                        mvn -B -DskipTests clean package
+                    '''
                 }
             }
         }
-        stage('Deploy') {
+
+        stage("Docker") {
             steps {
-                container('helm') {
+                echo "Docker"
+                dir("project"){
                     script {
-                        if(CURRENT_BRANCH == "master"){
-                           echo "Deploy prod"
-                           sh "helm version"
-                        }
-
-                       if(CURRENT_BRANCH == "develop"){
-                          echo "Deploy dev and staging"
-                          sh "helm version"
-                       }
-
-                       if(CURRENT_BRANCH != "develop" && env.BRANCH_NAME != "master"){
-                         echo "Deploy dev"
-                         sh "helm version"
-                       }
+                        sh '''docker build -t devs90/workshop .'''
                     }
                 }
             }
         }
-    }
+        
+        stage("Publish") {
+            steps {
+                echo "Publish"
+                dir("project"){
+                    script {
+                         sh '''
+                            echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                            docker push devs90/workshop:latest
+                          '''
+                    }
+                }
+            }
+        }
+    }      
 }

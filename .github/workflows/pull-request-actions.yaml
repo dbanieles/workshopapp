@@ -1,4 +1,4 @@
-name: Pull request actions
+name: Open pull request actions
 
 on:
   pull_request:

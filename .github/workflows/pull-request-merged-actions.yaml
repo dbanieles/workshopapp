@@ -60,4 +60,4 @@ jobs:
 
     - name: Docker push
       run: |
-        docker push devs90/workshop:8
+        docker push devs90/workshop:${{ env.RELEASE_VERSION }}

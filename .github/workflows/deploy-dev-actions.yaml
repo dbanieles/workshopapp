@@ -28,7 +28,7 @@ jobs:
           echo ${{ github.run_number }}
 
   call-workflow:
-    uses: ./.github/workflow/reusable-actions.yaml@v1
+    uses: ./.github/workflows/reusable-actions.yaml
     with:
       param: "param form parent action"
   # test:
